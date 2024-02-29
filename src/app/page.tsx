@@ -8,6 +8,9 @@ export default function page() {
       <header>
         <Navbar></Navbar>
       </header>
+      <main>
+
+      </main>
     </Fragment>
   )
 }
