@@ -32,7 +32,7 @@ const Login = () => {
 
     try {
       const respuesta = await axios.post(
-        "https://backend-vercel-psi.vercel.app/auth/login",
+        "https://backend-vercel-psi.vercel.app/auth/loginclientes",
         {
           usuario,
           password,

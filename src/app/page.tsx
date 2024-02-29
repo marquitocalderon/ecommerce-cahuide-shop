@@ -1,4 +1,5 @@
 
+import Gallery from '@/components/Gallery/Gallery'
 import Navbar from '@/components/Navbar/Navbar'
 import React, { Fragment } from 'react'
 
@@ -9,7 +10,7 @@ export default function page() {
         <Navbar></Navbar>
       </header>
       <main>
-
+        <Gallery></Gallery>
       </main>
     </Fragment>
   )
