@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import ubigeosData from "../../components/ubigeo.json";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 export default function Registrarse() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
@@ -78,67 +80,147 @@ export default function Registrarse() {
     setPasswordsMatch(e.target.value === password);
   };
 
-
+  // desde aca mejor dicho  trabajarias desde la linea 82
+  // priero has un registro normal , de ahi has con repetir dni , reptir gmail, repetir usuario
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
-    setCambiarBoton(true)
+    setCambiarBoton(true);
 
     const formDatos = new FormData(e.target);
 
     // Validar si las contraseñas coinciden
     if (password === confirmPassword) {
       // Restablecer el mensaje de error
-      setErrorMessage("");
 
-      const departamentoNombre = departamentos.find((dep) => dep.codigo === selectedDepartamento)?.nombre;
-      const provinciaNombre = provincias.find((prov) => prov.codigo === selectedProvincia)?.nombre;
-      const distritoNombre = distritos.find((dist) => dist.codigo === selectedDistrito)?.nombre;
-  
+      const departamentoNombre = departamentos.find(
+        (dep) => dep.codigo === selectedDepartamento
+      )?.nombre;
+      const provinciaNombre = provincias.find(
+        (prov) => prov.codigo === selectedProvincia
+      )?.nombre;
+      const distritoNombre = distritos.find(
+        (dist) => dist.codigo === selectedDistrito
+      )?.nombre;
 
       const enviarDatos = {
         nombre_completo: formDatos.get("nombre_completo"),
-        email : formDatos.get("correo"),
+        email: formDatos.get("correo"),
         dni: formDatos.get("dni"),
-        departamento:  departamentoNombre,
+        departamento: departamentoNombre,
         provincia: provinciaNombre,
-        distrito:distritoNombre,
+        distrito: distritoNombre,
         usuario: formDatos.get("usuario"),
         password: confirmPassword,
       };
 
-   try {
+      // Mostrar la primera alerta al iniciar la función
+      Swal.fire({
+        title: "Enviando datos...!",
+        timerProgressBar: true,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
 
-    console.log(enviarDatos)
-   /*   const response = await axios.post(
-        "API",
-        enviarDatos
-    );
+      try {
+        const response = await axios.post(
+          "https://backend-vercel-psi.vercel.app/clientes",
+          enviarDatos
+        );
+        console.log(response.data); // Puedes hacer algo con la respuesta si lo deseas
 
-    console.log(response);
-
-    if (response.status === 200) {
-        router.push("/login");
-    }*/
-      } catch (error) {
+        // Esperar el tiempo restante antes de cerrar la primera alerta y mostrar la segunda
+        setTimeout(() => {
+          // Cerrar la primera alerta
+          Swal.close();
+          // Mostrar segunda alerta de éxito
+          Swal.fire({
+            icon: "success",
+            title: "Registro exitoso!",
+            showConfirmButton: false,
+            timer: 2000,
+          }).then(() => {
+            // Esperar 2 segundos antes de recargar la página
+              window.location.reload();
+          });
+        });
+      } catch (error: any) {
+        console.log(error);
         if (axios.isAxiosError(error)) {
           if (!error.response) {
-            setCambiarBoton(false);
+            setTimeout(() => {
+              // Cerrar la primera alerta
+              Swal.close();
+              // Mostrar segunda alerta de éxito
+              Swal.fire({
+                icon: "error",
+                title: ("ERROR EN EL SERVIDOR"),
+              });
+            });
             setErrorMessage("ERROR EN EL SERVIDOR");
-          } else if (error.response.status === 400) {
+            setCambiarBoton(false); //sal mrda me bugueas feooo
+          } else if (error.response.data.statusCode === 400) {
+            setTimeout(() => {
+              // Cerrar la primera alerta
+              Swal.close();
+              // Mostrar segunda alerta de éxito
+              Swal.fire({
+                icon: "error",
+                title: error.response.data.message[0],
+              });
+            });
+            setErrorMessage(error.response.data.message[0]);
             setCambiarBoton(false);
-            setErrorMessage(error.response.data.error);
+          } else if (error.response.data.statusCode === 409) {
+            setTimeout(() => {
+              // Cerrar la primera alerta
+              Swal.close();
+              // Mostrar segunda alerta de éxito
+              Swal.fire({
+                icon: "error",
+                title: error.response.data.message,
+              });
+            });
+            setErrorMessage(error.response.data.message[0]);
+            setCambiarBoton(false);
           } else {
-            setCambiarBoton(false);
+            setTimeout(() => {
+              // Cerrar la primera alerta
+              Swal.close();
+              // Mostrar segunda alerta de éxito
+              Swal.fire({
+                icon: "error",
+                title: "ERROR DE ENVÍO DE DATOS",
+              });
+            });
             setErrorMessage("ERROR DE ENVÍO DE DATOS");
+            setCambiarBoton(false);
           }
         } else {
-          setCambiarBoton(false);
+          setTimeout(() => {
+            // Cerrar la primera alerta
+            Swal.close();
+            // Mostrar segunda alerta de éxito
+            Swal.fire({
+              icon: "error",
+              title: "ERROR",
+            });
+          });
           setErrorMessage("ERROR");
+          setCambiarBoton(false);
         }
       }
     } else {
+      setTimeout(() => {
+        // Cerrar la primera alerta
+        Swal.close();
+        // Mostrar segunda alerta de éxito
+        Swal.fire({
+          icon: "error",
+          title: "Las contraseñas no coinciden. Por favor, inténtalo de nuevo.",
+        });
+      });
       // Mostrar mensaje de error y actualizar el estado
       setErrorMessage(
         "Las contraseñas no coinciden. Por favor, inténtalo de nuevo."
@@ -445,13 +527,13 @@ export default function Registrarse() {
             </div>
 
             <div className="col-span-2">
-            <label
+              <label
                 htmlFor="nombre"
                 className="block text-gray-700 text-sm font-bold mb-2"
               >
--
+                -
               </label>
-            <button
+              <button
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
@@ -460,7 +542,9 @@ export default function Registrarse() {
             </div>
 
             <div className="mb-4 col-span-6">
-            <p className="text-red-500 text-xl font-bold mb-4">{errorMessage}</p>
+              {/* <p className="text-red-500 text-xl font-bold mb-4">
+                {errorMessage}
+              </p> */}
             </div>
           </div>
         </form>
