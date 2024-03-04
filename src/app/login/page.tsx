@@ -4,7 +4,6 @@ import Ojoabierto from "./icons/Ojoabierto";
 import Ojocerrado from "./icons/Ojocerrado";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 
@@ -13,8 +12,8 @@ interface FormData {
   password: string;
 }
 
-export default function page() {
-  const ruta = useRouter();
+export default function Page() {
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     usuario: "",
@@ -39,9 +38,9 @@ export default function page() {
       if (decodedToken) {
         // Redirigir al usuario según su rol
         if (decodedToken.role === "ADMIN") {
-          ruta.push("/admin");
+          window.location.href = "/admin"
         } else if (decodedToken.role === "USUARIO") {
-          ruta.push("/");
+          window.location.href = "/usuario"
         }
       } else {
         console.error("El token JWT no se pudo decodificar correctamente.");
