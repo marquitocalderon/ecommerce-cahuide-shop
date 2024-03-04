@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useState } from "react";
 import Ojoabierto from "./icons/Ojoabierto";
 import Ojocerrado from "./icons/Ojocerrado";
@@ -6,19 +6,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { WindSong } from "next/font/google";
+
 
 interface FormData {
   usuario: string;
   password: string;
-}
-
-interface TokenPayload {
-  sub: number;
-  username: string;
-  role: string;
-  iat: number;
-  exp: number;
 }
 
 export default function page() {
