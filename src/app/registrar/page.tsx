@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
-import ubigeosData from "../../components/ubigeo.json";
-import { useRouter } from "next/navigation";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Swal from "sweetalert2";
+import ubigeosData from "../../components/ubigeo.json";
 
 export default function Registrarse() {
   const router = useRouter();

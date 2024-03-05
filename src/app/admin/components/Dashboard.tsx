@@ -1,6 +1,8 @@
 "use client";
 import { initFlowbite } from "flowbite";
-import React, { Fragment, ReactNode, useEffect } from "react";
+import Cookies from "js-cookie";
+import { JwtPayload, decode } from "jsonwebtoken";
+import React, { Fragment, ReactNode, useEffect, useState } from "react";
 import Aside from "./Aside";
 
 interface DashboardProps {
@@ -13,6 +15,19 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
     return () => {
       // Cleanup if necessary
     };
+  }, []);
+
+  const [username, setUsername] = useState<string>('');
+
+  useEffect(() => {
+    const token = Cookies.get('token');
+
+    if (token) {
+      const decodedToken = decode(token) as JwtPayload | null;
+      if (decodedToken) {
+        setUsername(decodedToken.username+" ("+decodedToken.role+")");
+      }
+    }
   }, []);
 
   return (
@@ -72,16 +87,10 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
                 >
                   <div className="px-4 py-3" role="none">
                     <p
-                      className="text-sm text-gray-900 dark:text-white"
-                      role="none"
-                    >
-                      Marco Israel Calderon Garcia
-                    </p>
-                    <p
                       className="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                       role="none"
                     >
-                      markustlv
+                      {username ? username : 'Cargando...'}
                     </p>
                   </div>
                   <ul className="py-1" role="none">
@@ -106,8 +115,8 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
 
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 h-screen">
-         
-         {hijo}
+
+          {hijo}
 
         </div>
       </div>
