@@ -33,7 +33,7 @@ export default function Carrito() {
         <tbody>
         {productos.map((producto: any) => (
             <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td className="p-4">
+                <td className="p-4" key={producto.id_producto}>
                     <img src={producto.image} className="w-16 md:w-32 max-w-full max-h-full" alt={producto.nombre_producto}/>
                 </td>
                 <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white">
