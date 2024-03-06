@@ -1,10 +1,11 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import Login from "../login/Login";
 import Cart from "../icons/Cart";
 import { useAppSelector } from "@/redux/hooks";
 import Link from "next/link";
+import Cookies from "js-cookie";
 
 function Navbar() {
   useEffect(() => {
@@ -14,9 +15,18 @@ function Navbar() {
     };
   }, []);
 
-  
 
-  const contador = useAppSelector((state) => state.counterReducer.contador);
+  const [contadorestado, setContador] = useState('0');
+
+
+  useEffect(() => {
+    const cookieData = Cookies.get("contador");
+    if (cookieData) {
+      setContador(cookieData);
+    }
+  }, []); 
+
+
 
 
 
@@ -34,7 +44,7 @@ function Navbar() {
           <Cart></Cart>
           <span className="top-0 left-7 absolute w-8 h-8 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full">
             <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">
-              {contador}
+              {contadorestado ? contadorestado : "0"}
             </span>
           </span>
         </Link>

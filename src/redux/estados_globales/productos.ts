@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 interface Product {
   id_producto: number; 
   nombre_producto: string;
-  image: string;
+  imagen: string;
   precio: number
 }
 
@@ -22,6 +23,10 @@ export const productoSlice = createSlice({
     addProduct: (state, action: PayloadAction<Product>) => {
       // Agregar un producto al array de productos
       state.products.push(action.payload);
+
+       // Almacenar el estado actualizado en la cookie pero codificandolo
+       Cookies.set("productos", encodeURIComponent(JSON.stringify(state.products)));
+
     },
     // Otros reducers pueden ir aquí
   },

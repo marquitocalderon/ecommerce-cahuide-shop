@@ -7,11 +7,14 @@ import React from "react";
 
 
 export default function Gallery({ datosProductos }: { datosProductos: any }) {
+
+
   const usarFunciones = useAppDipatch();
 
   return (
     
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-lg:px-4 px-28 mt-10">
+
     {datosProductos.map((producto: any) => (
       <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 max-lg:col-span-2" key={producto.id_producto}>
         <a href="#">
@@ -79,16 +82,15 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
             <span className="text-3xl font-bold text-gray-900 dark:text-white">
               S/{producto.precio}
             </span>
-            <a
-              href="#"
+            <button
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={() => {
                 usarFunciones(increment());
-                usarFunciones(addProduct({ id_producto: producto.id_producto, nombre_producto: producto.nombre_producto, precio: producto.precio, image: producto.imagen}));
+                usarFunciones(addProduct({ id_producto: producto.id_producto, nombre_producto: producto.nombre_producto, precio: producto.precio, imagen: producto.imagen}));
               }}
             >
               Agregar al carrito
-            </a>
+            </button>
           </div>
         </div>
       </div>

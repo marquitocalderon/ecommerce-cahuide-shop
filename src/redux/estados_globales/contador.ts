@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
-
+import Cookies from "js-cookie";
 const valorInicialdelEstado = {
     contador: 0
 }
@@ -11,6 +11,8 @@ export const counterSlice = createSlice({
     reducers:{
         increment: (state) =>{
             state.contador = state.contador + 1
+
+            Cookies.set("contador", state.contador.toString());
         },
         decrement: (state) =>{
             state.contador = state.contador - 1
