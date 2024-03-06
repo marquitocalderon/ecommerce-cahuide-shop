@@ -3,6 +3,8 @@ import React, { useEffect } from "react";
 import { initFlowbite } from "flowbite";
 import Login from "../login/Login";
 import Cart from "../icons/Cart";
+import { useAppSelector } from "@/redux/hooks";
+import Link from "next/link";
 
 function Navbar() {
   useEffect(() => {
@@ -11,6 +13,12 @@ function Navbar() {
       // Cleanup if necessary
     };
   }, []);
+
+  
+
+  const contador = useAppSelector((state) => state.counterReducer.contador);
+
+
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
@@ -22,14 +30,14 @@ function Navbar() {
         </a>
 
         {/* CART */}
-        <div className="relative cursor-pointer">
+        <Link className="relative cursor-pointer" href={"/cart"}>
           <Cart></Cart>
           <span className="top-0 left-7 absolute w-8 h-8 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full">
             <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">
-              1
+              {contador}
             </span>
           </span>
-        </div>
+        </Link>
 
 
         <button

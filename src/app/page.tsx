@@ -12,9 +12,6 @@ export default async function page() {
   const datosProductos = await getProductos("https://backend-vercel-psi.vercel.app/productos")
   return (
     <Fragment>
-      <header>
-        <Navbar></Navbar>
-      </header>
       <main>
         <Gallery datosProductos={datosProductos}   ></Gallery>
       </main>
