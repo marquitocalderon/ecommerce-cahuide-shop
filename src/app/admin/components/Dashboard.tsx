@@ -4,6 +4,7 @@ import Cookies from "js-cookie";
 import { JwtPayload, decode } from "jsonwebtoken";
 import React, { Fragment, ReactNode, useEffect, useState } from "react";
 import Aside from "./Aside";
+import Colormenu from "./Colormenu";
 
 interface DashboardProps {
   hijo: ReactNode;
@@ -18,6 +19,7 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
   }, []);
 
   const [username, setUsername] = useState<string>('');
+  const [usernameimg, setUsernameimg] = useState<string>('');
 
   useEffect(() => {
     const token = Cookies.get('token');
@@ -26,6 +28,7 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
       const decodedToken = decode(token) as JwtPayload | null;
       if (decodedToken) {
         setUsername(decodedToken.username + " (" + decodedToken.role + ")");
+        setUsernameimg(decodedToken.imagen);
       }
     }
   }, []);
@@ -39,9 +42,17 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
     window.location.href = "/login"
   };
 
+
+  const [selectedColor, setSelectedColor] = useState("#6590D5");
+
+  const handleColorChange = (color: string) => {
+    console.log(color)
+    setSelectedColor(color);
+  };
+
   return (
     <Fragment>
-      <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+      <nav className="fixed top-0 z-50 w-full bg-transparent dark:bg-gray-800 dark:border-gray-700">
         <div className="px-3 py-3 lg:px-5 lg:pl-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center justify-start rtl:justify-end">
@@ -68,9 +79,8 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
                 </svg>
               </button>
               <a href="/admin" className="flex ms-2 md:me-24">
-                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
-                  Panel Admin
-                </span>
+                <img className="h-12 w-12 rounded-full bg-white" src="https://logomaker.designfreelogoonline.com/media/productdesigner/logo/resized/000749_online_store_logos_design_free_online_E-commerce_cart_logo_maker-02.png" alt="" />
+                <span className="self-center text-xl font-semibold sm:text-xl whitespace-nowrap dark:text-white bg-gray-100 rounded text-black">E-<mark className="px-2 text-white bg-neutral-600 rounded dark:bg-blue-500">Commerce</mark></span>
               </a>
             </div>
             <div className="flex items-center">
@@ -85,8 +95,7 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
                     <span className="sr-only">Open user menu</span>
                     <img
                       className="w-8 h-8 rounded-full"
-                      src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                      alt="user photo"
+                      src={usernameimg ? usernameimg : 'Cargando...'}
                     />
                   </button>
                 </div>
@@ -102,6 +111,7 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
                       {username ? username : 'Cargando...'}
                     </p>
                   </div>
+                  <Colormenu onColorChange={handleColorChange} />
                   <ul className="py-1" role="none">
                     <li>
                       <a
@@ -120,9 +130,7 @@ const Dashboard: React.FC<DashboardProps> = ({ hijo }) => {
           </div>
         </div>
       </nav>
-
-      <Aside></Aside>
-
+      <Aside selectedColor={selectedColor} />
       <div className="p-4 sm:ml-64">
         <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 h-screen">
 

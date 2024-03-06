@@ -3,10 +3,14 @@ import { useState } from 'react';
 import Productos from './Productos';
 import Seguridad from './Seguridad';
 
-export default function Aside() {
+interface AsideProps {
+  selectedColor: any;
+}
+
+export default function Aside({ selectedColor }: AsideProps) {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [securityDropdownOpen, setSecurityDropdownOpen] = useState(false);
-
+  console.log(selectedColor)
   const handleItemClick = (item: string) => {
     setSelectedItem(item);
   };
@@ -18,10 +22,12 @@ export default function Aside() {
   return (
     <aside
       id="logo-sidebar"
-      className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+      className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-red-600 border-r  sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
       aria-label="Sidebar"
+      style={{ backgroundColor: selectedColor }}
     >
-      <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
+
+      <div className="h-full px-3 pb-4 overflow-y-auto bg-red-600 dark:bg-gray-800" style={{ backgroundColor: selectedColor }}>
         <ul className="space-y-2 font-medium">
           <li>
             <Link
@@ -44,8 +50,8 @@ export default function Aside() {
               <span className="ms-3">Dashboard</span>
             </Link>
           </li>
-          <Seguridad selectedItem={selectedItem} handleItemClick={handleItemClick}/>
-          <Productos selectedItem={selectedItem} handleItemClick={handleItemClick}/>
+          <Seguridad selectedItem={selectedItem} handleItemClick={handleItemClick} />
+          <Productos selectedItem={selectedItem} handleItemClick={handleItemClick} />
         </ul>
       </div>
     </aside>
