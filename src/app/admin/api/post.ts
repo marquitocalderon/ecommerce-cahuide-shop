@@ -53,14 +53,14 @@ export async function datosPost(url: any, data: any, headers: any) {
           });
         });
         //sal mrda me bugueas feooo
-      } else if (error.response.data.statusCode === 400) {
+      } else if (error.response?.data.statusCode === 400) {
         setTimeout(() => {
           // Cerrar la primera alerta
           Swal.close();
           // Mostrar segunda alerta de éxito
           Swal.fire({
             icon: "error",
-            title: error.response?.data.message?.[0],
+            title: (error as any)?.response?.data?.message?.[0],
           });
         });
       } else if (error.response.data.statusCode === 409) {
@@ -70,7 +70,7 @@ export async function datosPost(url: any, data: any, headers: any) {
           // Mostrar segunda alerta de éxito
           Swal.fire({
             icon: "error",
-            title: error.response?.data.message,
+           title: (error as any)?.response?.data?.message,
           });
         });
       } else {
