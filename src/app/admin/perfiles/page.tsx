@@ -1,6 +1,5 @@
 
-import React, { Fragment, useEffect, useState } from "react";
-import axios from "axios";
+import { Fragment } from "react";
 import { datosGet } from "../api/get";
 import Tabla from "./components/Tabla";
 

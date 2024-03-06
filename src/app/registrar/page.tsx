@@ -167,7 +167,7 @@ export default function Registrarse() {
               // Mostrar segunda alerta de éxito
               Swal.fire({
                 icon: "error",
-                title: error.response.data.message[0],
+                title: error.response?.data.message[0],
               });
             });
             setErrorMessage(error.response.data.message[0]);
@@ -179,7 +179,7 @@ export default function Registrarse() {
               // Mostrar segunda alerta de éxito
               Swal.fire({
                 icon: "error",
-                title: error.response.data.message,
+                title: error.response?.data.message,
               });
             });
             setErrorMessage(error.response.data.message[0]);
