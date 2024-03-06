@@ -39,7 +39,10 @@ const Login = () => {
         }
       );
 
-      console.log(respuesta);
+      Cookies.set("token", respuesta.data.token);
+
+
+      window.location.href= "/"
     } catch (error) {
       // Manejar el error según tus necesidades
       console.error("Error al enviar datos:", error);

@@ -1,19 +1,23 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-import foto1 from "@/assets/portada1.png"
 
-export default function Gallery() {
+
+export default function Gallery({ datosProductos }: { datosProductos: any }) {
+
+
   return (
+    
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-lg:px-4 px-28 mt-10">
-      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 max-lg:col-span-2">
+    {datosProductos.map((producto: any) => (
+      <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 max-lg:col-span-2" key={producto.id_producto}>
         <a href="#">
-          <Image src={foto1} alt="" ></Image>
+          <Image src={producto.imagen} alt="" width={300} height={300} ></Image>
         </a>
         <div className="px-5 pb-5">
           <a href="#">
             <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-              Adidas Blue black 7, Nike blue moon,  Sport Deport
+             {producto.nombre_producto}
             </h5>
           </a>
           <div className="flex items-center mt-2.5 mb-5">
@@ -70,7 +74,7 @@ export default function Gallery() {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-3xl font-bold text-gray-900 dark:text-white">
-              S/599
+              S/{producto.precio}
             </span>
             <a
               href="#"
@@ -81,7 +85,7 @@ export default function Gallery() {
           </div>
         </div>
       </div>
-      
+         ))}
     </div>
   );
 }
