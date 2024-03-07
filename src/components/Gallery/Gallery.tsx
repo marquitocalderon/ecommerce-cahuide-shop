@@ -25,22 +25,32 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
     setCartProducts(storedProducts ? JSON.parse(storedProducts) : []);
   }, []); // The empty dependency array ensures that this effect runs only once on mount
 
-  // Step 2: Create functions to increment and retrieve the counter value
-  const incrementCounter = () => {
-    const newCounter = counter + 1;
-    setCounter(newCounter);
-    localStorage.setItem("contador", newCounter.toString());
-    window.location.reload()
-  };
+
 
   const addToCart = (producto: Producto) => {
     const { id_producto, nombre_producto, imagen, precio } = producto;
-    const newProduct = { id_producto, nombre_producto, imagen, precio };
   
-    const newCart = [...cartProducts, newProduct];
-    setCartProducts(newCart);
-    localStorage.setItem("productos", JSON.stringify(newCart));
+    // Check if the product with the same ID already exists in the cart
+    const isProductAlreadyInCart = cartProducts.some((item) => item.id_producto === id_producto);
+  
+    if (isProductAlreadyInCart) {
+      // Display an alert if the product with the same ID is already in the cart
+      alert("Este producto ya está en el carrito");
+    } else {
+      // Add the new product to the cart if it doesn't exist
+      const newProduct = { id_producto, nombre_producto, imagen, precio };
+      const newCart = [...cartProducts, newProduct];
+      setCartProducts(newCart);
+      localStorage.setItem("productos", JSON.stringify(newCart));
+  
+      // Increment the counter only if the product is added successfully
+      const newCounter = counter + 1;
+      setCounter(newCounter);
+      localStorage.setItem("contador", newCounter.toString());
+      window.location.reload();
+    }
   };
+  
   
 
 
@@ -121,7 +131,6 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
             <button
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={() => {
-                incrementCounter();
                 addToCart(producto);}}
             >
               Agregar al carrito
