@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import Login from "../login/Login";
 import Cart from "../icons/Cart";
@@ -26,6 +26,8 @@ function Navbar() {
 
 
   return (
+    <Fragment>
+  
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
@@ -35,14 +37,14 @@ function Navbar() {
         </a>
 
         {/* CART */}
-        <Link className="relative cursor-pointer" href={"/cart"}>
+        <a className="relative cursor-pointer" href="/cart">
           <Cart></Cart>
           <span className="top-0 left-7 absolute w-8 h-8 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full">
             <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">
               {contador ? contador : "0" }
             </span>
           </span>
-        </Link>
+        </a>
 
 
         <button
@@ -72,13 +74,13 @@ function Navbar() {
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
-              <Link
+              <a
                 href="/"
                 className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-black md:hover:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
                 aria-current="page"
               >
                 Inicio
-              </Link>
+              </a>
             </li>
             <li>
               <a
@@ -150,6 +152,7 @@ function Navbar() {
         </div>
       </div>
     </nav>
+    </Fragment>
   );
 }
 

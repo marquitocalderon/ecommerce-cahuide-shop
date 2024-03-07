@@ -38,7 +38,7 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
       alert("Este producto ya está en el carrito");
     } else {
       // Add the new product to the cart if it doesn't exist
-      const newProduct = { id_producto, nombre_producto, imagen, precio };
+      const newProduct = { id_producto, nombre_producto, imagen, precio , cantidad: 1 };
       const newCart = [...cartProducts, newProduct];
       setCartProducts(newCart);
       localStorage.setItem("productos", JSON.stringify(newCart));
