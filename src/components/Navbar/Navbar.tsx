@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import Login from "../login/Login";
 import Cart from "../icons/Cart";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDipatch, useAppSelector } from "@/redux/hooks";
 import Link from "next/link";
-import Cookies from "js-cookie";
-
+import Cookies from "js-cookie"
 function Navbar() {
   useEffect(() => {
     initFlowbite();
@@ -15,27 +14,16 @@ function Navbar() {
     };
   }, []);
 
+ 
 
-  const [contadorestado, setContador] = useState('0');
-
-
-  useEffect(() => {
-    const cookieData = Cookies.get("contador");
-    if (cookieData) {
-      setContador(cookieData);
-    }
-  }, []); 
-
-
-
-
+  const contador = localStorage.getItem("contador");
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-            Cahuide Shop
+           Ecommerce
           </span>
         </a>
 
@@ -44,7 +32,7 @@ function Navbar() {
           <Cart></Cart>
           <span className="top-0 left-7 absolute w-8 h-8 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full">
             <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white">
-              {contadorestado ? contadorestado : "0"}
+              {contador ? contador : "0" }
             </span>
           </span>
         </Link>

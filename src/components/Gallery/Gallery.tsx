@@ -3,13 +3,27 @@ import { increment } from "@/redux/estados_globales/contador";
 import { addProduct } from "@/redux/estados_globales/productos";
 import { useAppDipatch, useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 
 export default function Gallery({ datosProductos }: { datosProductos: any }) {
 
 
   const usarFunciones = useAppDipatch();
+  const initialCounter = localStorage.getItem("contador");
+  const [counter, setCounter] = useState<number>(initialCounter ? parseInt(initialCounter) : 0);
+  
+
+
+
+  // Step 2: Create functions to increment and retrieve the counter value
+  const incrementCounter = () => {
+    const newCounter = counter + 1;
+    setCounter(newCounter);
+    localStorage.setItem("contador", newCounter.toString());
+    window.location.reload();
+  };
+  
 
   return (
     
@@ -85,7 +99,7 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
             <button
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={() => {
-                usarFunciones(increment());
+                incrementCounter(),
                 usarFunciones(addProduct({ id_producto: producto.id_producto, nombre_producto: producto.nombre_producto, precio: producto.precio, imagen: producto.imagen}));
               }}
             >

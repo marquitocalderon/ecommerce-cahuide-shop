@@ -23,10 +23,6 @@ export const productoSlice = createSlice({
     addProduct: (state, action: PayloadAction<Product>) => {
       // Agregar un producto al array de productos
       state.products.push(action.payload);
-
-       // Almacenar el estado actualizado en la cookie pero codificandolo
-       Cookies.set("productos", encodeURIComponent(JSON.stringify(state.products)));
-
     },
     // Otros reducers pueden ir aquí
   },
