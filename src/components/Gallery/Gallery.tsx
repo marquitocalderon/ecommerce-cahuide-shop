@@ -1,30 +1,25 @@
 "use client";
-import { increment } from "@/redux/estados_globales/contador";
-import { addProduct } from "@/redux/estados_globales/productos";
-import { useAppDipatch, useAppSelector } from "@/redux/hooks";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 
 export default function Gallery({ datosProductos }: { datosProductos: any }) {
 
+  const [counter, setCounter] = useState<number>(0);
 
-  const usarFunciones = useAppDipatch();
-  const initialCounter = localStorage.getItem("contador");
-  const [counter, setCounter] = useState<number>(initialCounter ? parseInt(initialCounter) : 0);
-  
-
-
+  // Step 1: Use useEffect to initialize the counter from localStorage
+  useEffect(() => {
+    const initialCounter = localStorage.getItem("contador");
+    setCounter(initialCounter ? parseInt(initialCounter) : 0);
+  }, []); // The empty dependency array ensures that this effect runs only once on mount
 
   // Step 2: Create functions to increment and retrieve the counter value
   const incrementCounter = () => {
     const newCounter = counter + 1;
     setCounter(newCounter);
     localStorage.setItem("contador", newCounter.toString());
-    window.location.reload();
+    window.location.reload()
   };
-  
-
   return (
     
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-lg:px-4 px-28 mt-10">
@@ -99,9 +94,7 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
             <button
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={() => {
-                incrementCounter(),
-                usarFunciones(addProduct({ id_producto: producto.id_producto, nombre_producto: producto.nombre_producto, precio: producto.precio, imagen: producto.imagen}));
-              }}
+                incrementCounter()}}
             >
               Agregar al carrito
             </button>

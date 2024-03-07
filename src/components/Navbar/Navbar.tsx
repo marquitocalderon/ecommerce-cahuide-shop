@@ -1,22 +1,29 @@
-"use client";
+"use client"
 import React, { useEffect, useState } from "react";
 import { initFlowbite } from "flowbite";
 import Login from "../login/Login";
 import Cart from "../icons/Cart";
-import { useAppDipatch, useAppSelector } from "@/redux/hooks";
 import Link from "next/link";
-import Cookies from "js-cookie"
 function Navbar() {
+
+
+  const [contador, setContador] = useState(0);
+
   useEffect(() => {
     initFlowbite();
+
+    // Obtener el valor del contador desde localStorage solo en el cliente
+    if (typeof window !== "undefined") {
+      const storedContador = localStorage.getItem("contador");
+      setContador(storedContador ? parseInt(storedContador, 10) : 0);
+    }
+
     return () => {
       // Cleanup if necessary
     };
   }, []);
 
- 
 
-  const contador = localStorage.getItem("contador");
 
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
