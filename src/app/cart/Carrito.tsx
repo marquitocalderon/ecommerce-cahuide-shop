@@ -1,15 +1,18 @@
 "use client";
 
 import Navbar from "@/components/Navbar/Navbar";
+import axios from "axios";
 import { initFlowbite } from "flowbite";
 import { Fragment, useEffect, useState } from "react";
+import Visa from "./icons/Visa";
+import Mastercard from "./icons/Mastercard";
 
 interface Producto {
   id_producto: number;
   nombre_producto: string;
   imagen: string;
   precio: number;
-  cantidad: number
+  cantidad: number;
 }
 
 export default function Carrito() {
@@ -27,7 +30,6 @@ export default function Carrito() {
 
     const storedProducts = localStorage.getItem("productos");
     setCartProducts(storedProducts ? JSON.parse(storedProducts) : []);
-
   }, []);
   //gracias a que ya lo tenias casi todo hecho solo hacia falta este segundo useEffect, lo quise hacer en el primero pero como ahi espera que cargue los productos entonces tengo que hacer un segundo usseEffect para poder tener datos llenos en el cardproducto.
   useEffect(() => {
@@ -57,7 +59,6 @@ export default function Carrito() {
     updateLocalStorage(updatedCart);
   };
 
-
   const removeProductFromCart = (id_producto: number) => {
     const updatedCart = cartProducts.filter(
       (producto) => producto.id_producto !== id_producto
@@ -66,7 +67,7 @@ export default function Carrito() {
     const newCounter = counter - 1;
     setCounter(newCounter);
     localStorage.setItem("contador", newCounter.toString());
-    window.location.reload()
+    window.location.reload();
   };
 
   const updateLocalStorage = (updatedCart: Producto[]) => {
@@ -74,12 +75,47 @@ export default function Carrito() {
     localStorage.setItem("productos", JSON.stringify(updatedCart));
   };
 
+  const pagarProductos = async () => {
+    const productosToSend = cartProducts.map(({ nombre_producto, precio, cantidad }) => ({
+      nombre_producto,
+      precio,
+      cantidad,
+    }));
+  
+    const enviarDatos = {
+      productos: productosToSend,
+    };
 
+    try {
+      // Assuming your server endpoint is '/api/updateCart' - replace it with your actual endpoint
+      const response = await axios.post(
+        "https://backend-vercel-psi.vercel.app/stripe/pago",
+        enviarDatos
+      );
 
+      window.location.href = response.data.session.url;
+    } catch (error) {
+      // Handle errors if the request fails
+      console.error("Error sending cart to server:", error);
+    }
+  };
 
   return (
     <Fragment>
       <Navbar></Navbar>
+      <div className="col-span-3 sm:col-span-3 text-right">
+            <button
+            onClick={pagarProductos}
+              type="button"
+              className="text-gray-900 bg-slate-200 hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm t px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-800 dark:bg-white dark:border-gray-700 dark:text-gray-900 dark:hover:bg-gray-200 me-2 mb-2"
+            >
+              Pagar con Tarjeta
+              <div className="ml-2 flex gap-1 items-center">
+                <Visa />
+                <Mastercard />
+              </div>
+            </button>
+          </div>
       <div className="relative p-6 bg-white border border-gray-200 overflow-x-auto shadow-md  sm:rounded-lg rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -190,22 +226,39 @@ export default function Carrito() {
                   </button>
                 </td>
               </tr>
-            ))
-            }
+            ))}
           </tbody>
         </table>
         <div className="grid gap-4 mb-4 grid-cols-3">
           <div className="col-span-1 sm:col-span-1">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subtotal</label>
-            <input type="text" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="S/ 25.00" value={`S/ ${subTotal.toFixed(2)}`} disabled />
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Subtotal
+            </label>
+            <input
+              type="text"
+              name="price"
+              id="price"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="S/ 25.00"
+              value={`S/ ${subTotal.toFixed(2)}`}
+              disabled
+            />
           </div>
           <div className="col-span-1 sm:col-span-1">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total</label>
-            <input type="text" name="price" id="price" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="S/ 2999" value={`S/ ${subTotal.toFixed(2)}`} disabled />
+            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Total
+            </label>
+            <input
+              type="text"
+              name="price"
+              id="price"
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              placeholder="S/ 2999"
+              value={`S/ ${subTotal.toFixed(2)}`}
+              disabled
+            />
           </div>
-          <div className="col-span-3 sm:col-span-3 text-right">
-            <button type="button" className="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-yellow-900">Pagar ahora</button>
-          </div>
+
         </div>
       </div>
     </Fragment>
