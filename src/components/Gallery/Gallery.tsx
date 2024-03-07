@@ -2,15 +2,27 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 
+interface Producto {
+  id_producto: number;
+  nombre_producto: string;
+  imagen: string;
+  precio: number;
+}
+
 
 export default function Gallery({ datosProductos }: { datosProductos: any }) {
 
   const [counter, setCounter] = useState<number>(0);
 
+  const [cartProducts, setCartProducts] = useState<Producto[]>([]);
+
   // Step 1: Use useEffect to initialize the counter from localStorage
   useEffect(() => {
     const initialCounter = localStorage.getItem("contador");
     setCounter(initialCounter ? parseInt(initialCounter) : 0);
+
+    const storedProducts = localStorage.getItem("productos");
+    setCartProducts(storedProducts ? JSON.parse(storedProducts) : []);
   }, []); // The empty dependency array ensures that this effect runs only once on mount
 
   // Step 2: Create functions to increment and retrieve the counter value
@@ -20,6 +32,21 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
     localStorage.setItem("contador", newCounter.toString());
     window.location.reload()
   };
+
+  const addToCart = (producto: Producto) => {
+    const { id_producto, nombre_producto, imagen, precio } = producto;
+    const newProduct = { id_producto, nombre_producto, imagen, precio };
+  
+    const newCart = [...cartProducts, newProduct];
+    setCartProducts(newCart);
+    localStorage.setItem("productos", JSON.stringify(newCart));
+  };
+  
+
+
+
+
+
   return (
     
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-lg:px-4 px-28 mt-10">
@@ -94,7 +121,8 @@ export default function Gallery({ datosProductos }: { datosProductos: any }) {
             <button
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               onClick={() => {
-                incrementCounter()}}
+                incrementCounter();
+                addToCart(producto);}}
             >
               Agregar al carrito
             </button>

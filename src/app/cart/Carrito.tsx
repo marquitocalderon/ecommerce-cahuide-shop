@@ -12,35 +12,12 @@ interface Producto {
 }
 
 export default function Carrito() {
-  const [productos, setProductos] = useState<Producto[]>([
-    {
-      id_producto: 0,
-      nombre_producto: "",
-      imagen: "",
-      precio: 0
-    }
-  ]);
+  const [cartProducts, setCartProducts] = useState<Producto[]>([]);
 
+  // Step 1: Use useEffect to initialize the counter from localStorage
   useEffect(() => {
-    const obtenerProductosDesdeCookie = () => {
-      const productosCookie = Cookies.get('productos');
-
-      if (productosCookie) {
-        const decodedValue = decodeURIComponent(productosCookie);
-        try {
-          const datosProductosCookie = JSON.parse(decodedValue);
-
-          if (Array.isArray(datosProductosCookie)) {
-            // Asegúrate de que los datos sean del tipo Producto[]
-            setProductos(datosProductosCookie as Producto[]);
-          }
-        } catch (error) {
-          console.error('Error al parsear la cookie:', error);
-        }
-      }
-    };
-
-    obtenerProductosDesdeCookie();
+    const storedProducts = localStorage.getItem("productos");
+    setCartProducts(storedProducts ? JSON.parse(storedProducts) : []);
   }, []);
   
 
@@ -67,7 +44,7 @@ export default function Carrito() {
           </tr>
         </thead>
         <tbody>
-        {productos.map((producto: Producto) => (
+        {cartProducts.map((producto: Producto) => (
                 <tr
                   key={producto.id_producto}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
